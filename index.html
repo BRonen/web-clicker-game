@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Clicker game</title>
+        <script>
+            class UpgradesManager{
+                upgrades = []
+
+                constructor(){
+                    this.upgrades = [
+                        { name: 'teste', price: 10, value: 0, amount: 1 },
+                        { name: 'test', price: 100, value: 0, amount: 5 },
+                        { name: 'tes', price: 1000, value: 0, amount: 10 },
+                    ]
+                }
+
+                getAmount(){
+                    return this.upgrades.reduce((acc, upgrade) => {
+                        const totalAmount = upgrade.value * upgrade.amount
+                        return acc + totalAmount
+                    }, 0)
+                }
+
+                buyUpgrade(index){
+                    const upgrade = this.upgrades[index]
+                    upgrade.value += 1
+                    const price = upgrade.price
+                    upgrade.price *= 3
+                    return price
+                }
+
+                update(elements, score){
+                    const callbacks = []
+
+                    elements.upgrades.innerHTML = this.upgrades.reduce((acc, upgrade, idx) => {
+                        acc += `<button ${score.score < upgrade.price && 'disabled'} class="upgrade" id="upgrade-${idx}">
+                            <p>${upgrade.name}</p><p>preço: ${upgrade.price}</p><p>gera ${upgrade.amount}</p><p>tem ${upgrade.value}</p>
+                        </button>`
+                        callbacks.push( () => alert(`upgrade-${idx}`) )
+                        return acc
+                    }, '')
+                    
+                    callbacks.forEach((callback, idx) => document.getElementById(`upgrade-${idx}`).addEventListener(
+                        'click', () => {
+                            if(!score.decrement(this.upgrades[idx].price))
+                                return
+                            this.upgrades[idx].value += 1
+                            this.upgrades[idx].price *= 2
+                            this.update(elements, score)
+                        }
+                    ))
+
+                    elements.perSecond.innerHTML = `score per second: ${this.getAmount()}`;
+                }
+            
+                upgradeFactory(){
+                    const upgrade = {}
+
+                    upgrades.push(upgrade)
+                    return upgrade
+                }
+            }
+
+            class Score{
+                element = null
+                score = 0
+                listeners = []
+
+                constructor(element, score){
+                    this.element = element
+                    this.score = score
+                }
+
+                increment(value = 1){
+                    this.score += value
+                    this.emitOnChange()
+                }
+
+                decrement(value){
+                    if(this.score - value < 0)
+                        return false
+                    this.score -= value
+                    this.emitOnChange()
+                    return true
+                }
+
+                emitOnChange(){
+                    for(let listener of this.listeners)
+                        listener(this.score)
+
+                    this.element.innerHTML = `${this.score}`
+                }
+
+                onChange(callback){
+                    this.listeners.push(callback)
+                }
+            }
+
+            class Game{
+                score = null
+                scoreIncrementDelay = 1000
+
+                constructor(htmlElements){
+                    this.score = new Score(htmlElements.score, 0)
+                    this.upgradesManager = new UpgradesManager()
+                    
+                    this.score.onChange(() => {
+                        this.upgradesManager.update(htmlElements, this.score)
+                    })
+
+                    htmlElements.click.addEventListener('click', () => {
+                        this.score.increment()
+                    })
+                    
+                    this.scoreLoop = setInterval(() => {
+                        const amount = this.upgradesManager.getAmount()
+                        this.score.increment(amount)
+                    }, this.scoreIncrementDelay)
+                }
+
+                run(){
+                }
+            }
+
+            window.onload = () => {
+                const htmlElements = {
+                    score: document.getElementById('score'),
+                    click: document.getElementById('click'),
+                    upgrades: document.getElementById('upgrades'),
+                    perSecond: document.getElementById('perSecond'),
+                }
+                const game = new Game(htmlElements)
+
+                game.run()
+            }
+        </script>
+    </head>
+    <body>
+        <div id="game">
+            <div id="scoreLayout">
+                <h1 id="score"></h1>
+                <p id="perSecond"></p>
+            </div>
+            <button id="click">Click!</button>
+            <div id="upgrades"></div>
+        </div>
+        <style contenteditable style="display: block; white-space: pre;">
+            body, * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            #game {
+                background-color: #F0F0F0;
+
+                padding: 20px;
+
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            #scoreLayout {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            #upgrades {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            .upgrade {
+                font-size: 1.3rem;
+            }
+        </style>
+    </body>
+</html>
