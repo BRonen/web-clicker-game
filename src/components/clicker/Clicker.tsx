@@ -6,7 +6,7 @@ interface ClickerProps{
     label: string | null
 }
 
-const Clicker: FC<ClickerProps> = ({ label }) => {
+function Clicker({ label }: ClickerProps) {
     const dispatch = useDispatch()
 
     return (

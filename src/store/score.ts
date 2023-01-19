@@ -13,13 +13,13 @@ export const scoreSlice = createSlice({
     name: 'score',
     initialState,
     reducers: {
-        increment: (state) => {
-            state.value += 1
+        increment: (state: ScoreState) => {
+            state.value++
         },
-        decrement: (state) => {
+        decrement: (state: ScoreState) => {
             state.value -= 1
         },
-        incrementByAmount: (state, action: PayloadAction<number>) => {
+        incrementByAmount: (state: ScoreState, action: PayloadAction<number>) => {
             state.value += action.payload
         },
         decrementByAmount: (state, action: PayloadAction<number>) => {

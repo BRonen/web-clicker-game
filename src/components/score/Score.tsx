@@ -1,34 +1,16 @@
-import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import { RootState } from '../../store'
-import { useSelector, useDispatch } from 'react-redux'
-import { incrementByAmount } from '../../store/score'
-import { setVisible } from '../../store/upgrades'
 
-function App() {
-    const dispatch = useDispatch()
-
+function Score() {
     const { value } = useSelector((state: RootState) => state.score)
-    const { upgrades, totalAmountPerSecond } = useSelector((state: RootState) => state.upgrades)
-
-    useEffect(() => {
-        const incrementLoop = setTimeout(
-            () => {
-                dispatch( incrementByAmount(totalAmountPerSecond) )
-                upgrades.forEach((upgrade, index) => {
-                    if(value >= upgrade.price)
-                        dispatch( setVisible(index) )
-                })
-            }, 500
-        )
-    
-        return () => clearInterval(incrementLoop)
-    }, [value, upgrades, totalAmountPerSecond])
+    const { totalAmountPerSecond } = useSelector((state: RootState) => state.upgrades)
 
     return (
-        <div>
-            { value }
-        </div>
+        <>
+            <h2>{ value }</h2>
+            <h3>Current points per second: { totalAmountPerSecond }</h3>
+        </>
     )
 }
 
-export default App
+export default Score

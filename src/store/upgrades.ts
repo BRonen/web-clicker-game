@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import { RootState } from '.'
 
 export interface Upgrade{
     name: string
@@ -34,8 +35,8 @@ const initialState: UpgradesState = {
             name: 'Upgrade#3',
             price: 500,
             amount: 50,
-            quantity: 0,
-            visible: false,
+            quantity: 1,
+            visible: true,
         },
         { 
             name: 'Upgrade#4',
@@ -52,10 +53,10 @@ export const UpgradesSlice = createSlice({
     name: 'upgrades',
     initialState,
     reducers: {
-        setVisible: (state, action: PayloadAction<number>) => {
+        setVisible: (state: UpgradesState, action: PayloadAction<number>) => {
             state.upgrades[action.payload].visible = true
         },
-        incrementUpgrade: (state, action: PayloadAction<number>) => {
+        incrementUpgrade: (state: UpgradesState, action: PayloadAction<number>) => {
             state.upgrades[action.payload].quantity += 1
             state.upgrades[action.payload].price *= 2
 
