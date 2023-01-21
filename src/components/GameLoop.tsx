@@ -27,6 +27,25 @@ function GameLoop() {
         upgrades.forEach(updateUpgradesVisibility)
     }, [value, upgrades])
 
+    useEffect(() => {
+        const savingTimeout = setTimeout(() => {
+            const state = JSON.stringify({
+                value,
+                upgrades,
+                totalAmountPerSecond,
+            })
+    
+            console.log('saving progress...', {
+                value,
+                upgrades,
+                totalAmountPerSecond,
+            })
+    
+            localStorage.setItem('gameState', state)
+        }, 100)
+        return () => clearTimeout(savingTimeout)
+    }, [value, upgrades, totalAmountPerSecond])
+
     return (null)
 }
 

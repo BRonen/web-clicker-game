@@ -72,9 +72,12 @@ export const UpgradesSlice = createSlice({
 
             state.totalAmountPerSecond = totalAmountPerSecond
         },
+        hydrate: (state: UpgradesState, action: PayloadAction<UpgradesState>) => {
+            return {...state, ...action.payload}
+        }
     },
 })
 
-export const { incrementUpgrade, setVisible } = UpgradesSlice.actions
+export const { incrementUpgrade, setVisible, hydrate } = UpgradesSlice.actions
 
 export default UpgradesSlice.reducer

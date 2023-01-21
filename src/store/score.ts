@@ -24,10 +24,13 @@ export const scoreSlice = createSlice({
         },
         decrementByAmount: (state, action: PayloadAction<number>) => {
             state.value -= action.payload
+        },
+        hydrate: (state: ScoreState, action: PayloadAction<ScoreState>) => {
+            return {...state, ...action.payload}
         }
     },
 })
 
-export const { increment, decrement, incrementByAmount, decrementByAmount } = scoreSlice.actions
+export const { increment, decrement, incrementByAmount, decrementByAmount, hydrate } = scoreSlice.actions
 
 export default scoreSlice.reducer
