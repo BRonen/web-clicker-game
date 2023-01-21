@@ -10,7 +10,7 @@ function Clicker({ label }: ClickerProps) {
     const dispatch = useDispatch()
 
     return (
-        <button onClick={() => dispatch( increment() )}>{ label }</button>
+        <button className="clicker" onClick={() => dispatch( increment() )}>{ label }</button>
     )
 }
 

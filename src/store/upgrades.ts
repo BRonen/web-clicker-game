@@ -35,8 +35,8 @@ const initialState: UpgradesState = {
             name: 'Upgrade#3',
             price: 500,
             amount: 50,
-            quantity: 1,
-            visible: true,
+            quantity: 0,
+            visible: false,
         },
         { 
             name: 'Upgrade#4',

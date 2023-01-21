@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import Upgrade from '../upgrade/upgrade'
+import Upgrade from '../upgrade/UpgradeCard'
 import { decrementByAmount } from '../../store/score'
 import { incrementUpgrade } from '../../store/upgrades'
 import { RootState } from '../../store'
@@ -22,25 +22,18 @@ function UpgradeList() {
     }, [upgrades])
 
     return (
-        <>
+        <div className="upgrade-list">
             {upgrades.map(
-                (upgrade, index) => {
-                    if(upgrade.visible)
-                        return (
-                            <Upgrade
-                                key={index}
-                                onClick={() => buyUpgrade(index, value)}
-                                disabled={value < upgrade.price}
-                                name={upgrade.name}
-                                price={upgrade.price}
-                                quantity={upgrade.quantity}
-                                amount={upgrade.amount}
-                            />
-                        )
-                    return null 
-                }
+                (upgrade, index) => (
+                    <Upgrade
+                        key={upgrade.name}
+                        onClick={() => buyUpgrade(index, value)}
+                        disabled={value < upgrade.price}
+                        {...upgrade}
+                    />
+                )
             )}
-        </>
+        </div>
     )
 }
 

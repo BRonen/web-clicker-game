@@ -1,14 +1,15 @@
-import { FC } from 'react'
 import Score from './components/score/Score'
 import Clicker from './components/clicker/Clicker'
 import UpgradeList from './components/upgradeList/UpgradeList'
-import GameLoop from './components/gameLoop'
+import GameLoop from './components/GameLoop'
 
-const App: FC = () => {
+function App() {
     return (
         <div className="App">
-            <Score/>
-            <Clicker label="Click!"/>
+            <main>
+                <Score/>
+                <Clicker label="Click!"/>
+            </main>
             <UpgradeList/>
             <GameLoop/>
         </div>
