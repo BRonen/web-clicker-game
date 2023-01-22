@@ -1,11 +1,18 @@
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { styled } from '@stitches/react'
 import Upgrade from '../upgrade/UpgradeCard'
 import { decrementByAmount } from '../../store/score'
 import { incrementUpgrade } from '../../store/upgrades'
 import { RootState } from '../../store'
 
-function UpgradeList() {
+const UpgradesWrapper = styled('div', {
+    display: 'flex',
+    gap: '1rem',
+    overflow: 'scroll',
+})
+
+export default function () {
     const dispatch = useDispatch()
 
     const { upgrades } = useSelector((state: RootState) => state.upgrades)
@@ -14,15 +21,14 @@ function UpgradeList() {
     const buyUpgrade = useCallback((index: number, value: number) => {
         const upgrade = upgrades[index]
 
-        if(value < upgrade.price)
-            return
+        if(value < upgrade.price) return
         
         dispatch( decrementByAmount(upgrade.price) )
         dispatch( incrementUpgrade(index) )
     }, [upgrades])
 
     return (
-        <div className="upgrade-list">
+        <UpgradesWrapper>
             {upgrades.map(
                 (upgrade, index) => (
                     <Upgrade
@@ -33,8 +39,6 @@ function UpgradeList() {
                     />
                 )
             )}
-        </div>
+        </UpgradesWrapper>
     )
 }
-
-export default UpgradeList

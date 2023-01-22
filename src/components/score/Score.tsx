@@ -6,10 +6,10 @@ function Score() {
     const { totalAmountPerSecond } = useSelector((state: RootState) => state.upgrades)
 
     return (
-        <div>
+        <>
             <h2>{ value }</h2>
-            <h3>Current points per second: { totalAmountPerSecond }</h3>
-        </div>
+            <h4>Current points per second: { totalAmountPerSecond }</h4>
+        </>
     )
 }
 
